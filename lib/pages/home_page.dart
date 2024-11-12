@@ -21,8 +21,13 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        title: Text(docID == null ? 'Add note' : 'Edit Note'),
         content: TextField(
           controller: textController,
+          decoration: InputDecoration(
+            hintText: 'Enter your Note here',
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+          ),
         ),
         actions: [
           // button to save
@@ -81,26 +86,34 @@ class _HomePageState extends State<HomePage> {
                     document.data() as Map<String, dynamic>;
                 String noteText = data['note'];
 
-                // display as a list tile
-                return ListTile(
-                    title: Text(noteText),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        //update button
-                        IconButton(
-                          onPressed: () => openNoteBox(docID: docID),
-                          icon: const Icon(Icons.settings),
-                        ),
+                // display as a Card wrapping ListTile
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Add margin for spacing
+                  elevation: 3, // Adds a shadow effect to the card
+                  shape: RoundedRectangleBorder(
+                   borderRadius: BorderRadius.circular(10), // Rounded corners for the card
+                  ),
 
-                        //delete button
-                        IconButton(
-                          onPressed: () => firestoreService.deleteNote(docID),
-                          icon: const Icon(Icons.delete),
-                        ),
-                      ],
-                    )
-                    );
+                  child: ListTile(
+                      title: Text(noteText),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          //update button
+                          IconButton(
+                            onPressed: () => openNoteBox(docID: docID),
+                            icon: const Icon(Icons.settings),
+                          ),
+                  
+                          //delete button
+                          IconButton(
+                            onPressed: () => firestoreService.deleteNote(docID),
+                            icon: const Icon(Icons.delete),
+                          ),
+                        ],
+                      ),
+                    ),
+                );
               },
             );
           }
